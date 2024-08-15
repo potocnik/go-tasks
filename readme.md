@@ -25,3 +25,7 @@ go test
 14. Write a program to simulate a race condition occurring when one goroutine updates a data variable with odd numbers, while another updates the same data variable with even numbers. After each update , attempt to display the data contained in the data variable to screen. [Goroutines][Concurrency][Race Conditions]
 15. Refactor the program created in exercise 14 to use channels, mutexes to synchronise all actions. [Concurrency][Waitgroups][Workerpools][Mutexes]
 16. Create a program that prints a list of things To Do and the current status of the To Do item using two goroutines which alternate between To Do Items and To Do statuses [Concurrency][Waitgroups][Workerpools][Mutexes]
+
+## References
+
+Project structure: [Go Repo Structure](https://gist.github.com/ayoubzulfiqar/9f1a34049332711fddd4d4b2bfd46096#file-folder_structure-md)
