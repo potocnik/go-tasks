@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"tasks/pkg/utils"
 )
 
 func GetTasks() []string {
@@ -31,12 +32,8 @@ func WriteTasks() bytes.Buffer {
 	var tasks = GetTasks()
 	var memoryStream bytes.Buffer
 	jsonData, errMarshal := json.Marshal(tasks)
-	if errMarshal != nil {
-		fmt.Println("Error marshaling json:", errMarshal)
-	}
+	utils.CheckWithMessage(errMarshal, "Error marshaling json")
 	_, errWrite := memoryStream.WriteString(string(jsonData))
-	if errWrite != nil {
-		fmt.Println("Error writing to memory stream:", errWrite)
-	}
+	utils.CheckWithMessage(errWrite, "Error writing to memory stream")
 	return memoryStream
 }

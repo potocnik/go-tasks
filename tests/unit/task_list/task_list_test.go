@@ -1,4 +1,4 @@
-package tasks
+package unit_test
 
 import (
 	tasks "tasks/pkg/task_list"

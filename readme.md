@@ -10,9 +10,11 @@ go run .
 ## Test
 
 ```
-cd console
-go test
+cd tests
+go test ./...
 ```
+
+Or cd into a subdirectory of tests for more granular tests
 
 ## Requirements
 
