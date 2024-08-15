@@ -8,7 +8,7 @@ import (
 
 func TestPrintTasks(t *testing.T) {
 	t.Run("print tasks", func(t *testing.T) {
-		actual := tasks.PrintTasks()
+		actual := tasks.PrintTasks([]string{"Task 1", "Task 2", "Task 3"})
 		expected := []string{
 			"1. Task 1",
 			"2. Task 2",
@@ -25,21 +25,9 @@ func TestPrintTasks(t *testing.T) {
 	})
 }
 
-func TestGetTasks(t *testing.T) {
-	t.Run("get tasks", func(t *testing.T) {
-		actual := tasks.GetTasks()
-		expected := []string{
-			"Task 1",
-			"Task 2",
-			"Task 3",
-		}
-		test_utils.AssertEqualArray(t, actual, expected)
-	})
-}
-
 func TestWriteTasks(t *testing.T) {
 	t.Run("write tasks", func(t *testing.T) {
-		actual := tasks.WriteTasks()
+		actual := tasks.WriteTasks([]string{"Task 1", "Task 2", "Task 3"})
 		expected := "[\"Task 1\",\"Task 2\",\"Task 3\"]"
 		test_utils.AssertEqual(t, actual.String(), expected)
 	})
