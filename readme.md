@@ -1,12 +1,5 @@
 # Go Task List
 
-## Run
-
-```
-cd console
-go run .
-```
-
 ## Test
 
 ```
@@ -15,6 +8,21 @@ go test ./...
 ```
 
 Or cd into a subdirectory of tests for more granular tests
+
+## Command line
+
+```
+cd cmd/console
+```
+
+Run the program with the following options
+
+1. Print tasks:
+```go run .```
+2. Push:
+```go run . push "Task contents"```
+3. Pop:
+```go run . pop```
 
 ## Requirements
 

@@ -23,14 +23,17 @@ func processCommand(task_list []string) []string {
 	if len(os.Args) > 1 {
 		var command = os.Args[1]
 		switch command {
-		case "add":
-			return processCommandAdd(task_list)
+		case "push":
+			return processCommandPush(task_list)
+		case "pop":
+			tasks, _ := processCommandPop(task_list)
+			return tasks
 		}
 	}
 	return task_list
 }
 
-func processCommandAdd(task_list []string) []string {
+func processCommandPush(task_list []string) []string {
 	if len(os.Args) <= 2 {
 		fmt.Println("[ERROR] command add requires an additional argument")
 	} else {
@@ -40,9 +43,21 @@ func processCommandAdd(task_list []string) []string {
 	return task_list
 }
 
+func processCommandPop(task_list []string) ([]string, *string) {
+	if len(task_list) < 1 {
+		return task_list, nil
+	}
+	task := task_list[0]
+	task_list = utils.RemoveAt(task_list, 0)
+	return task_list, &task
+}
+
 func loadState() []string {
 	fmt.Println("[INFO] Reading tasks from data/tasks.json")
 	input := utils.ReadFile("tasks.json")
+	if input == nil {
+		return []string{}
+	}
 	return tasks.ReadTasks(input)
 }
 
