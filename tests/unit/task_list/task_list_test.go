@@ -32,6 +32,11 @@ func TestPush(t *testing.T) {
 		expected := []string{"Task 1", "Task 2", "Task 3", "New task"}
 		test_utils.AssertEqualArray(t, actual, expected)
 	})
+	t.Run("push a task with list full", func(t *testing.T) {
+		actual := tasks.Push([]string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5", "Task 6", "Task 7", "Task 8", "Task 9", "Task 10"}, "New task")
+		expected := []string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5", "Task 6", "Task 7", "Task 8", "Task 9", "Task 10"}
+		test_utils.AssertEqualArray(t, actual, expected)
+	})
 }
 
 func TestPop(t *testing.T) {
