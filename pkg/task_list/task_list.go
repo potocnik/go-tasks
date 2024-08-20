@@ -54,10 +54,15 @@ func SaveState(task_list []string) bytes.Buffer {
 
 func writeTasks(task_list []string) bytes.Buffer {
 	var memoryStream bytes.Buffer
-	jsonData, errMarshal := json.Marshal(task_list)
-	utils.CheckWithMessage(errMarshal, "Error marshaling json")
-	_, errWrite := memoryStream.WriteString(string(jsonData))
-	utils.CheckWithMessage(errWrite, "Error writing to memory stream")
+	if len(task_list) == 0 {
+		_, errWrite := memoryStream.WriteString("[]")
+		utils.CheckWithMessage(errWrite, "Error writing to memory stream")
+	} else {
+		jsonData, errMarshal := json.Marshal(task_list)
+		utils.CheckWithMessage(errMarshal, "Error marshaling json")
+		_, errWrite := memoryStream.WriteString(string(jsonData))
+		utils.CheckWithMessage(errWrite, "Error writing to memory stream")
+	}
 	return memoryStream
 }
 

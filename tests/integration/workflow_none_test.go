@@ -2,6 +2,7 @@ package integration_test
 
 import (
 	"bytes"
+	"fmt"
 	tasks "tasks/pkg/task_list"
 	"tasks/pkg/test_utils"
 	"testing"
@@ -52,6 +53,28 @@ func TestWorkflow_Push(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Push(task_list, "Another task")
 		actual := tasks.SaveState(task_list)
+		test_utils.AssertEqual(t, actual.String(), expected)
+	})
+}
+
+func TestWorkflow_Pop(t *testing.T) {
+	t.Run("pop with empty list", func(t *testing.T) {
+		expected := "[]"
+		data := bytes.NewBuffer([]byte("[]"))
+		var task_list = tasks.LoadState(data)
+		task_list, _ = tasks.Pop(task_list)
+		actual := tasks.SaveState(task_list)
+		test_utils.AssertEqual(t, actual.String(), expected)
+	})
+	t.Run("pop with one item in list", func(t *testing.T) {
+		expected := "[]"
+		data := bytes.NewBuffer([]byte("[\"One task\"]"))
+		var task_list = tasks.LoadState(data)
+		fmt.Println(task_list)
+		task_list, _ = tasks.Pop(task_list)
+		fmt.Println(task_list)
+		actual := tasks.SaveState(task_list)
+		fmt.Println(actual)
 		test_utils.AssertEqual(t, actual.String(), expected)
 	})
 }
