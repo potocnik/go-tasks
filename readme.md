@@ -9,6 +9,12 @@ go test ./...
 
 Alternatively, `cd` into any directory under `./tests/`, such as `./tests/unit/` or `./tests/integration/` before executing test command to run granular tests.
 
+Generate test report
+
+```
+go test -v 2>&1 ./... | go-junit-report -out test-report.xml
+```
+
 ## Command line
 
 ```
