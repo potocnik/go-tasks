@@ -17,7 +17,7 @@ func WriteFile(path string, data bytes.Buffer) {
 func ReadFile(path string) *bytes.Buffer {
 	finalPath := fullPath(path)
 	if !fileExists(finalPath) {
-		return nil
+		return bytes.NewBuffer([]byte{})
 	}
 	data, err := os.ReadFile(finalPath)
 	Check(err)

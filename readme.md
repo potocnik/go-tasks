@@ -30,6 +30,13 @@ Run the program with the following options
 3. Pop:
 ```go run . pop```
 
+## HTTP Server
+
+```
+cd cmd/http/
+go run ./...
+```
+
 ## Requirements
 
 ### Part 1
