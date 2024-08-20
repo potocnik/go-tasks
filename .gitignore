@@ -1,4 +1,3 @@
 data/
 test-report.xml
 pkg/.DS_Store
-go.sum

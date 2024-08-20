@@ -23,9 +23,9 @@ func Print(task_list []string) []string {
 
 func Push(task_list []string, task_text string) []string {
 	if task_text == "" {
-		fmt.Println("[ERROR] cannot append empty task")
+		fmt.Println("[ERROR]: cannot append empty task")
 	} else if len(task_list) >= ITEM_LIMIT {
-		fmt.Println("[ERROR] list is full (limit " + fmt.Sprintf("%d", ITEM_LIMIT) + ")")
+		fmt.Println("[ERROR]: list is full (limit " + fmt.Sprintf("%d", ITEM_LIMIT) + ")")
 	} else {
 		fmt.Println("[DEBUG]: Appending task: \"" + task_text + "\"")
 		task_list = append(task_list, task_text)
