@@ -7,7 +7,7 @@ import (
 	"tasks/pkg/utils"
 )
 
-func PrintTasks(task_list []string) []string {
+func Print(task_list []string) []string {
 	lines := []string{}
 	for itemIndex := 0; itemIndex < 10; itemIndex++ {
 		task := ""
@@ -19,7 +19,36 @@ func PrintTasks(task_list []string) []string {
 	return lines
 }
 
-func WriteTasks(task_list []string) bytes.Buffer {
+func Push(task_list []string, task_text string) []string {
+	if task_text == "" {
+		fmt.Println("[ERROR] cannot append empty task")
+	} else {
+		fmt.Println("[DEBUG]: Appending task: \"" + task_text + "\"")
+		task_list = append(task_list, task_text)
+	}
+	return task_list
+}
+
+func Pop(task_list []string) ([]string, *string) {
+	if len(task_list) < 1 {
+		return task_list, nil
+	}
+	task := task_list[0]
+	task_list = utils.RemoveAt(task_list, 0)
+	return task_list, &task
+}
+
+func LoadState(stream *bytes.Buffer) []string {
+	return readTasks(stream)
+}
+
+func SaveState(task_list []string) bytes.Buffer {
+	fmt.Println("[INFO] Writing tasks to data/tasks.json")
+	stream := writeTasks(task_list)
+	return stream
+}
+
+func writeTasks(task_list []string) bytes.Buffer {
 	var memoryStream bytes.Buffer
 	jsonData, errMarshal := json.Marshal(task_list)
 	utils.CheckWithMessage(errMarshal, "Error marshaling json")
@@ -28,7 +57,7 @@ func WriteTasks(task_list []string) bytes.Buffer {
 	return memoryStream
 }
 
-func ReadTasks(stream *bytes.Buffer) []string {
+func readTasks(stream *bytes.Buffer) []string {
 	var data []string
 	err := json.Unmarshal(stream.Bytes(), &data)
 	utils.Check(err)

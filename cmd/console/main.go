@@ -8,14 +8,18 @@ import (
 )
 
 func main() {
-	var task_list = loadState()
+	fmt.Println("[DEBUG] Reading tasks from data/tasks.json")
+	input := utils.ReadFile("tasks.json")
+	var task_list = tasks.LoadState(input)
 	task_list = processCommand(task_list)
-	fmt.Println("[INFO] Printing tasks to screen")
-	lines := tasks.PrintTasks(task_list)
+	fmt.Println("[DEBUG] Printing tasks to screen")
+	lines := tasks.Print(task_list)
 	for lineIndex := 0; lineIndex < len(lines); lineIndex++ {
 		fmt.Println(lines[lineIndex])
 	}
-	saveState(task_list)
+	stream := tasks.SaveState(task_list)
+	fmt.Println("[DEBUG] Writing tasks to data/tasks.json")
+	utils.WriteFile("tasks.json", stream)
 }
 
 func processCommand(task_list []string) []string {
@@ -24,47 +28,15 @@ func processCommand(task_list []string) []string {
 		var command = os.Args[1]
 		switch command {
 		case "push":
-			return processCommandPush(task_list)
+			var commandArg = ""
+			if len(os.Args) > 3 {
+				commandArg = os.Args[2]
+			}
+			return tasks.Push(task_list, commandArg)
 		case "pop":
-			tasks, _ := processCommandPop(task_list)
+			tasks, _ := tasks.Pop(task_list)
 			return tasks
 		}
 	}
 	return task_list
-}
-
-func processCommandPush(task_list []string) []string {
-	if len(os.Args) <= 2 {
-		fmt.Println("[ERROR] command add requires an additional argument")
-	} else {
-		var taskText = os.Args[2]
-		task_list = append(task_list, taskText)
-	}
-	return task_list
-}
-
-func processCommandPop(task_list []string) ([]string, *string) {
-	if len(task_list) < 1 {
-		return task_list, nil
-	}
-	task := task_list[0]
-	task_list = utils.RemoveAt(task_list, 0)
-	return task_list, &task
-}
-
-func loadState() []string {
-	fmt.Println("[INFO] Reading tasks from data/tasks.json")
-	input := utils.ReadFile("tasks.json")
-	if input == nil {
-		return []string{}
-	}
-	return tasks.ReadTasks(input)
-}
-
-func saveState(task_list []string) {
-	fmt.Println("[INFO] Writing tasks to data/tasks.json")
-	stream := tasks.WriteTasks(task_list)
-	fmt.Print("[INFO] JSON: ")
-	fmt.Println(stream.String())
-	utils.WriteFile("tasks.json", stream)
 }

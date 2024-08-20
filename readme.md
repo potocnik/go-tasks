@@ -7,12 +7,12 @@ cd tests
 go test ./...
 ```
 
-Or cd into a subdirectory of tests for more granular tests
+Alternatively, `cd` into any directory under `./tests/`, such as `./tests/unit/` or `./tests/integration/` before executing test command to run granular tests.
 
 ## Command line
 
 ```
-cd cmd/console
+cd cmd/console/
 ```
 
 Run the program with the following options
