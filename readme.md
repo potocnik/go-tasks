@@ -31,6 +31,13 @@ Generate test report
 go test -v 2>&1 ./... | $GOBIN/go-junit-report > test-report.xml
 ```
 
+Concurrency test
+
+```
+cd tests/integration/
+go test concurrency_test.go -v -race
+```
+
 ## Command line
 
 ```

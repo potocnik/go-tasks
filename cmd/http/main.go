@@ -5,9 +5,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"strconv"
 	tasks "tasks/pkg/task_list"
-	"tasks/pkg/utils"
+	error "tasks/pkg/utils/errors"
+	file "tasks/pkg/utils/files"
+	request "tasks/pkg/utils/request"
 )
 
 const PORT = 10000
@@ -15,7 +18,8 @@ const PORT = 10000
 var TaskList = []string{}
 
 func main() {
-	input := utils.ReadFile("tasks.json")
+	setUpLogging()
+	input := file.ReadFile("tasks.json")
 	if input.Len() > 0 {
 		TaskList = tasks.LoadState(input)
 	}
@@ -23,22 +27,29 @@ func main() {
 	handleRequests()
 }
 
+func setUpLogging() {
+	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	error.Check(err)
+	log.SetOutput(file)
+	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
+}
+
 func listTasks(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		writeToResponse(w)
 	case "POST":
-		task_text, success := utils.GetParameter(r, "name")
+		task_text, success := request.GetParameter(r, "name")
 		if success {
 			TaskList = tasks.Push(TaskList, task_text)
 		}
 		writeToResponse(w)
 	case "PUT":
-		text, textSuccess := utils.GetParameter(r, "name")
-		positionStr, positionSuccess := utils.GetParameter(r, "position")
+		text, textSuccess := request.GetParameter(r, "name")
+		positionStr, positionSuccess := request.GetParameter(r, "position")
 		if textSuccess && positionSuccess {
 			position, err := strconv.Atoi(positionStr)
-			utils.Check(err)
+			error.Check(err)
 			tasks.Set(TaskList, position, text)
 		}
 		writeToResponse(w)

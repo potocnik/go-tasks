@@ -1,17 +1,17 @@
-package utils
+package error
 
-import "fmt"
+import logger "tasks/pkg/logging"
 
 func Check(err error) {
 	if err != nil {
-		fmt.Println("Caugth managed error", err)
+		logger.Error("Managed error", err)
 		panic(err)
 	}
 }
 
 func CheckWithMessage(err error, message string) {
 	if err != nil {
-		fmt.Println(message, err)
+		logger.Error(message, err)
 		panic(err)
 	}
 }

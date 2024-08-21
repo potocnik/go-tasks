@@ -13,7 +13,7 @@ import (
 var TaskList = []string{}
 
 func TestConcurrency(t *testing.T) {
-	t.Run("push with empty list", func(t *testing.T) {
+	t.Run("concurrency with full list", func(t *testing.T) {
 		taskData := bytes.NewBuffer([]byte("[\"Task 1\",\"Task 2\",\"Task 3\",\"Task 4\",\"Task 5\",\"Task 6\",\"Task 7\",\"Task 8\",\"Task 9\",\"Task 10\"]"))
 		TaskList = tasks.LoadState(taskData)
 		var wg sync.WaitGroup

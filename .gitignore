@@ -1,3 +1,4 @@
 data/
 test-report.xml
 pkg/.DS_Store
+logs.txt

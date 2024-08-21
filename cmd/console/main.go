@@ -3,13 +3,16 @@ package main
 import (
 	"fmt"
 	"os"
+	logger "tasks/pkg/logging"
 	tasks "tasks/pkg/task_list"
-	"tasks/pkg/utils"
+	file "tasks/pkg/utils/files"
 )
 
 func main() {
+	logger.SetUp()
+	logger.Info("Reading tasks from data/tasks.json")
 	fmt.Println("[DEBUG] Reading tasks from data/tasks.json")
-	input := utils.ReadFile("tasks.json")
+	input := file.ReadFile("tasks.json")
 	var task_list = tasks.LoadState(input)
 	task_list = processCommand(task_list)
 	fmt.Println("[DEBUG] Printing tasks to screen")
@@ -19,7 +22,7 @@ func main() {
 	}
 	stream := tasks.SaveState(task_list)
 	fmt.Println("[DEBUG] Writing tasks to data/tasks.json")
-	utils.WriteFile("tasks.json", stream)
+	file.WriteFile("tasks.json", stream)
 }
 
 func processCommand(task_list []string) []string {

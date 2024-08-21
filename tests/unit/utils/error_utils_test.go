@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"errors"
-	"tasks/pkg/utils"
+	error "tasks/pkg/utils/errors"
 	"testing"
 )
 
@@ -14,10 +14,10 @@ func TestCheck(t *testing.T) {
 				t.Errorf("The code did not panic")
 			}
 		}()
-		utils.Check(errorUnderTest)
+		error.Check(errorUnderTest)
 	})
 	t.Run("no error should result in no panic", func(t *testing.T) {
-		utils.Check(nil)
+		error.Check(nil)
 	})
 }
 
@@ -29,9 +29,9 @@ func TestCheckWithMessage(t *testing.T) {
 				t.Errorf("The code did not panic")
 			}
 		}()
-		utils.CheckWithMessage(errorUnderTest, "Example")
+		error.CheckWithMessage(errorUnderTest, "Example")
 	})
 	t.Run("no error should result in no panic", func(t *testing.T) {
-		utils.CheckWithMessage(nil, "Example")
+		error.CheckWithMessage(nil, "Example")
 	})
 }

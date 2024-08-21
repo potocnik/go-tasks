@@ -4,7 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"tasks/pkg/utils"
+	array "tasks/pkg/utils/arrays"
+	error "tasks/pkg/utils/errors"
 )
 
 const ITEM_LIMIT = 10
@@ -38,7 +39,7 @@ func Pop(task_list []string) ([]string, *string) {
 		return task_list, nil
 	}
 	task := task_list[0]
-	task_list = utils.RemoveAt(task_list, 0)
+	task_list = array.RemoveAt(task_list, 0)
 	return task_list, &task
 }
 
@@ -63,12 +64,12 @@ func writeTasks(task_list []string) bytes.Buffer {
 	var memoryStream bytes.Buffer
 	if len(task_list) == 0 {
 		_, errWrite := memoryStream.WriteString("[]")
-		utils.CheckWithMessage(errWrite, "Error writing to memory stream")
+		error.CheckWithMessage(errWrite, "Error writing to memory stream")
 	} else {
 		jsonData, errMarshal := json.Marshal(task_list)
-		utils.CheckWithMessage(errMarshal, "Error marshaling json")
+		error.CheckWithMessage(errMarshal, "Error marshaling json")
 		_, errWrite := memoryStream.WriteString(string(jsonData))
-		utils.CheckWithMessage(errWrite, "Error writing to memory stream")
+		error.CheckWithMessage(errWrite, "Error writing to memory stream")
 	}
 	return memoryStream
 }
@@ -76,6 +77,6 @@ func writeTasks(task_list []string) bytes.Buffer {
 func readTasks(stream *bytes.Buffer) []string {
 	var data []string
 	err := json.Unmarshal(stream.Bytes(), &data)
-	utils.Check(err)
+	error.Check(err)
 	return data
 }
