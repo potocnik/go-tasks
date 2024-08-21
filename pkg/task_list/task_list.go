@@ -42,6 +42,13 @@ func Pop(task_list []string) ([]string, *string) {
 	return task_list, &task
 }
 
+func Set(task_list []string, position int, task_text string) []string {
+	if position > 0 && len(task_list) >= position {
+		task_list[position-1] = task_text
+	}
+	return task_list
+}
+
 func LoadState(stream *bytes.Buffer) []string {
 	return readTasks(stream)
 }

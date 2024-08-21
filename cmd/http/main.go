@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 	tasks "tasks/pkg/task_list"
 	"tasks/pkg/utils"
 )
@@ -27,8 +28,19 @@ func listTasks(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		writeToResponse(w)
 	case "POST":
-		task_text := utils.Read(r.Body)
-		TaskList = tasks.Push(TaskList, task_text)
+		task_text, success := utils.GetParameter(r, "name")
+		if success {
+			TaskList = tasks.Push(TaskList, task_text)
+		}
+		writeToResponse(w)
+	case "PUT":
+		text, textSuccess := utils.GetParameter(r, "name")
+		positionStr, positionSuccess := utils.GetParameter(r, "position")
+		if textSuccess && positionSuccess {
+			position, err := strconv.Atoi(positionStr)
+			utils.Check(err)
+			tasks.Set(TaskList, position, text)
+		}
 		writeToResponse(w)
 	case "DELETE":
 		TaskList, _ = tasks.Pop(TaskList)

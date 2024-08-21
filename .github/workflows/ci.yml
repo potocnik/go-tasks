@@ -30,7 +30,6 @@ jobs:
         export PATH=$PATH:$GOBIN/
         go install github.com/jstemmer/go-junit-report@latest
         go test -v ./... | $GOBIN/go-junit-report -set-exit-code > test-report.xml
-
     - name: Test Summary
       uses: test-summary/action@v1
       with:
