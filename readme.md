@@ -1,5 +1,21 @@
 # Go Task List
 
+## Requirements
+
+```
+go get -u github.com/jstemmer/go-junit-report
+```
+
+Append to `~/.zshrc` file:
+```
+# GO
+export GOPATH=$HOME/go
+export GOROOT=/usr/local/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOPATH
+export PATH=$PATH:$GOROOT/bin
+```
+
 ## Test
 
 ```
@@ -12,7 +28,7 @@ Alternatively, `cd` into any directory under `./tests/`, such as `./tests/unit/`
 Generate test report
 
 ```
-go test -v 2>&1 ./... | go-junit-report -out test-report.xml
+go test -v 2>&1 ./... | $GOBIN/go-junit-report > test-report.xml
 ```
 
 ## Command line
