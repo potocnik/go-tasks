@@ -5,16 +5,19 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
 	models "tasks/pkg/models"
 	tasks "tasks/pkg/task_list"
 	error "tasks/pkg/utils/errors"
 	file "tasks/pkg/utils/files"
+	"time"
 )
 
 const PORT = 10000
+const REQUEST_TIMEOUT = time.Minute * 20
 
 var TaskList = []string{}
-var ChannelWork chan models.QueMessage
+var channelWork chan models.QueueMessage
 
 func main() {
 	setUpLogging()
@@ -35,7 +38,7 @@ func setUpLogging() {
 }
 
 func setUpChannels() {
-	ChannelWork = make(chan models.QueMessage)
+	channelWork = make(chan models.QueueMessage)
 }
 
 func handleRequests() {
@@ -44,16 +47,40 @@ func handleRequests() {
 }
 
 func handleTasks(w http.ResponseWriter, r *http.Request) {
+	var group sync.WaitGroup
 	switch r.Method {
 	case http.MethodGet:
 		handle_Taks_Get(w)
 	case http.MethodPost:
-		handle_Tasks_Post(w, r, ChannelWork)
+		fmt.Println("Starting POST /tasks")
+		group.Add(1)
+		go handle_Tasks_Post(r, channelWork)
+		go handleQueueMessage(channelWork, &group)
 	case http.MethodPut:
-		handle_Tasks_Put(w, r)
+		fmt.Println("Starting PUT /tasks")
+		group.Add(1)
+		go handle_Tasks_Put(r, channelWork)
+		go handleQueueMessage(channelWork, &group)
+		time.Sleep(time.Second * 3)
 	case http.MethodDelete:
-		handle_Tasks_Delete(w)
+		fmt.Println("Starting DELETE /tasks")
+		group.Add(1)
+		go handle_Tasks_Delete(channelWork)
+		go handleQueueMessage(channelWork, &group)
 	default:
 		handle_Tasks_BadMethod(w, r)
+	}
+	group.Wait()
+	writeToResponse(w)
+}
+
+func handleQueueMessage(channel chan models.QueueMessage, group *sync.WaitGroup) {
+	select {
+	case queueMessage := <-channel:
+		fmt.Printf("Consumer Received: %v\n", queueMessage)
+		group.Done()
+	case <-time.After(time.Second * 2):
+		// #TODO: Return timeout status code
+		group.Done()
 	}
 }

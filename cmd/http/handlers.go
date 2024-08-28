@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	models "tasks/pkg/models"
@@ -11,32 +12,31 @@ import (
 )
 
 func handle_Taks_Get(w http.ResponseWriter) {
-	writeToResponse(w)
+	// writeToResponse(w)
 }
 
-func handle_Tasks_Post(w http.ResponseWriter, r *http.Request, channel chan models.QueMessage) {
+func handle_Tasks_Post(r *http.Request, channel chan models.QueueMessage) {
 	task_text, success := request.GetParameter(r, "name")
 	if success {
 		TaskList = tasks.Push(TaskList, task_text)
+		channel <- models.NewQueueMessage(models.HttpOperation_Post, task_text, -1)
 	}
-	channel <- models.NewQueueMessage(models.HttpOperation_Get, task_text, -1)
-	writeToResponse(w)
 }
 
-func handle_Tasks_Put(w http.ResponseWriter, r *http.Request) {
+func handle_Tasks_Put(r *http.Request, channel chan models.QueueMessage) {
 	text, textSuccess := request.GetParameter(r, "name")
 	positionStr, positionSuccess := request.GetParameter(r, "position")
 	if textSuccess && positionSuccess {
 		position, err := strconv.Atoi(positionStr)
 		error.Check(err)
 		tasks.Set(TaskList, position, text)
+		channel <- models.NewQueueMessage(models.HttpOperation_Put, text, position)
 	}
-	writeToResponse(w)
 }
 
-func handle_Tasks_Delete(w http.ResponseWriter) {
+func handle_Tasks_Delete(channel chan models.QueueMessage) {
 	TaskList, _ = tasks.Pop(TaskList)
-	writeToResponse(w)
+	channel <- models.NewQueueMessage(models.HttpOperation_Delete, "", -1)
 }
 
 func handle_Tasks_BadMethod(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +44,7 @@ func handle_Tasks_BadMethod(w http.ResponseWriter, r *http.Request) {
 }
 
 func writeToResponse(w http.ResponseWriter) {
+	fmt.Println("Writing to response")
 	var result = []string{}
 	if len(TaskList) > 0 {
 		result = TaskList

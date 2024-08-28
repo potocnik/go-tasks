@@ -5,13 +5,13 @@ type OperationData struct {
 	Text  string
 }
 
-type QueMessage struct {
+type QueueMessage struct {
 	Operation string
 	Data      *OperationData
 }
 
-func NewQueueMessage(operation string, text string, index int) QueMessage {
-	result := QueMessage{}
+func NewQueueMessage(operation string, text string, index int) QueueMessage {
+	result := QueueMessage{}
 	result.Operation = operation
 	if index > -1 || text != "" {
 		data := OperationData{}
@@ -22,6 +22,6 @@ func NewQueueMessage(operation string, text string, index int) QueMessage {
 	return result
 }
 
-func IsEmptyMessage(message *QueMessage) bool {
-	return message == nil || message == &QueMessage{}
+func IsEmptyMessage(message *QueueMessage) bool {
+	return message == nil || message == &QueueMessage{}
 }

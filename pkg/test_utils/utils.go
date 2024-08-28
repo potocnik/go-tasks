@@ -27,7 +27,7 @@ func AssertEqual_Array(t testing.TB, actual, expected []string) {
 	}
 }
 
-func AssertEqual_QueMessage(t testing.TB, actual *models.QueMessage, expected *models.QueMessage) {
+func AssertEqual_QueMessage(t testing.TB, actual *models.QueueMessage, expected *models.QueueMessage) {
 	t.Helper()
 	if actual.Operation != expected.Operation {
 		t.Errorf("got %v want %v", actual.Operation, expected.Operation)
