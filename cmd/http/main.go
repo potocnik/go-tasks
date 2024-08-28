@@ -1,24 +1,24 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
-	"strconv"
+	models "tasks/pkg/models"
 	tasks "tasks/pkg/task_list"
 	error "tasks/pkg/utils/errors"
 	file "tasks/pkg/utils/files"
-	request "tasks/pkg/utils/request"
 )
 
 const PORT = 10000
 
 var TaskList = []string{}
+var ChannelWork chan models.QueMessage
 
 func main() {
 	setUpLogging()
+	setUpChannels()
 	input := file.ReadFile("tasks.json")
 	if input.Len() > 0 {
 		TaskList = tasks.LoadState(input)
@@ -34,42 +34,26 @@ func setUpLogging() {
 	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
 }
 
-func listTasks(w http.ResponseWriter, r *http.Request) {
-	switch r.Method {
-	case "GET":
-		writeToResponse(w)
-	case "POST":
-		task_text, success := request.GetParameter(r, "name")
-		if success {
-			TaskList = tasks.Push(TaskList, task_text)
-		}
-		writeToResponse(w)
-	case "PUT":
-		text, textSuccess := request.GetParameter(r, "name")
-		positionStr, positionSuccess := request.GetParameter(r, "position")
-		if textSuccess && positionSuccess {
-			position, err := strconv.Atoi(positionStr)
-			error.Check(err)
-			tasks.Set(TaskList, position, text)
-		}
-		writeToResponse(w)
-	case "DELETE":
-		TaskList, _ = tasks.Pop(TaskList)
-		writeToResponse(w)
-	default:
-		http.Error(w, "Unexpected HTTP method: "+r.Method, http.StatusBadRequest)
-	}
-}
-
-func writeToResponse(w http.ResponseWriter) {
-	var result = []string{}
-	if len(TaskList) > 0 {
-		result = TaskList
-	}
-	json.NewEncoder(w).Encode(result)
+func setUpChannels() {
+	ChannelWork = make(chan models.QueMessage)
 }
 
 func handleRequests() {
-	http.HandleFunc("/v1/api/tasks", listTasks)
+	http.HandleFunc("/v1/api/tasks", handleTasks)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", PORT), nil))
+}
+
+func handleTasks(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodGet:
+		handle_Taks_Get(w)
+	case http.MethodPost:
+		handle_Tasks_Post(w, r, ChannelWork)
+	case http.MethodPut:
+		handle_Tasks_Put(w, r)
+	case http.MethodDelete:
+		handle_Tasks_Delete(w)
+	default:
+		handle_Tasks_BadMethod(w, r)
+	}
 }

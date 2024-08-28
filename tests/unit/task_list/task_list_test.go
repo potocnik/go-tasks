@@ -22,7 +22,7 @@ func TestPrint(t *testing.T) {
 			"9. ",
 			"10. ",
 		}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 }
 
@@ -30,12 +30,12 @@ func TestPush(t *testing.T) {
 	t.Run("push a task", func(t *testing.T) {
 		actual := tasks.Push([]string{"Task 1", "Task 2", "Task 3"}, "New task")
 		expected := []string{"Task 1", "Task 2", "Task 3", "New task"}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 	t.Run("push a task with list full", func(t *testing.T) {
 		actual := tasks.Push([]string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5", "Task 6", "Task 7", "Task 8", "Task 9", "Task 10"}, "New task")
 		expected := []string{"Task 1", "Task 2", "Task 3", "Task 4", "Task 5", "Task 6", "Task 7", "Task 8", "Task 9", "Task 10"}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 }
 
@@ -43,7 +43,7 @@ func TestPop(t *testing.T) {
 	t.Run("pop a task", func(t *testing.T) {
 		actual, _ := tasks.Pop([]string{"Task 1", "Task 2", "Task 3"})
 		expected := []string{"Task 2", "Task 3"}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 }
 
@@ -52,7 +52,7 @@ func TestLoadState(t *testing.T) {
 		data := bytes.NewBuffer([]byte("[\"Task 1\",\"Task 2\",\"Task 3\"]"))
 		actual := tasks.LoadState(data)
 		expected := []string{"Task 1", "Task 2", "Task 3"}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 }
 
@@ -60,6 +60,6 @@ func TestSaveState(t *testing.T) {
 	t.Run("load state", func(t *testing.T) {
 		actual := tasks.SaveState([]string{"Task 1", "Task 2", "Task 3"})
 		expected := "[\"Task 1\",\"Task 2\",\"Task 3\"]"
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 }

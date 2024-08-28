@@ -29,7 +29,7 @@ func TestWorkflow_None(t *testing.T) {
 			"9. ",
 			"10. ",
 		}
-		test_utils.AssertEqualArray(t, actual, expected)
+		test_utils.AssertEqual_Array(t, actual, expected)
 	})
 }
 
@@ -40,7 +40,7 @@ func TestWorkflow_Push(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Push(task_list, "New task")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("push with items in list", func(t *testing.T) {
 		expected := "[\"Task 1\",\"Task 2\",\"Task 3\"]"
@@ -48,7 +48,7 @@ func TestWorkflow_Push(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Push(task_list, "Task 3")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("push with list full", func(t *testing.T) {
 		expected := FULL_TASKS
@@ -56,7 +56,7 @@ func TestWorkflow_Push(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Push(task_list, "Another task")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("push multiple items", func(t *testing.T) {
 		expected := FULL_TASKS
@@ -66,7 +66,7 @@ func TestWorkflow_Push(t *testing.T) {
 		task_list = tasks.Push(task_list, "Task 10")
 		task_list = tasks.Push(task_list, "Task 11")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 }
 
@@ -77,7 +77,7 @@ func TestWorkflow_Pop(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list, _ = tasks.Pop(task_list)
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("pop with one item in list", func(t *testing.T) {
 		expected := "[]"
@@ -85,7 +85,7 @@ func TestWorkflow_Pop(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list, _ = tasks.Pop(task_list)
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("pop multiple items", func(t *testing.T) {
 		expected := "[]"
@@ -95,7 +95,7 @@ func TestWorkflow_Pop(t *testing.T) {
 		task_list, _ = tasks.Pop(task_list)
 		task_list, _ = tasks.Pop(task_list)
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 }
 
@@ -106,7 +106,7 @@ func TestWorkflowSet(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Set(task_list, 0, "Task update")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("set first", func(t *testing.T) {
 		expected := "[\"Task update\"]"
@@ -114,7 +114,7 @@ func TestWorkflowSet(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Set(task_list, 1, "Task update")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("set last with existing item", func(t *testing.T) {
 		expected := "[\"Task 1\",\"Task 2\",\"Task 3\",\"Task 4\",\"Task 5\",\"Task 6\",\"Task 7\",\"Task 8\",\"Task 9\",\"Task update\"]"
@@ -122,7 +122,7 @@ func TestWorkflowSet(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Set(task_list, 10, "Task update")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 	t.Run("set last without existing item", func(t *testing.T) {
 		expected := "[\"Task 1\",\"Task 2\",\"Task 3\",\"Task 4\",\"Task 5\",\"Task 6\",\"Task 7\",\"Task 8\",\"Task 9\"]"
@@ -130,6 +130,6 @@ func TestWorkflowSet(t *testing.T) {
 		var task_list = tasks.LoadState(data)
 		task_list = tasks.Set(task_list, 10, "Task update")
 		actual := tasks.SaveState(task_list)
-		test_utils.AssertEqual(t, actual.String(), expected)
+		test_utils.AssertEqual_String(t, actual.String(), expected)
 	})
 }
