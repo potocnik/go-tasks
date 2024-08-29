@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func SetUp() {
+func SetUpLogging() {
 	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatal("Could not open file logs.txt for logging")
@@ -24,14 +24,4 @@ func Debug(message string, data any) {
 
 func Error(message string, err error) {
 	log.Println("[ERROR]: "+message, err)
-}
-
-func SetUpLogging() {
-	file, err := os.OpenFile("logs.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		Error("Could not open file logs.txt for logging", err)
-		panic(err)
-	}
-	log.SetOutput(file)
-	log.SetFlags(log.LstdFlags | log.Lmicroseconds | log.Llongfile)
 }

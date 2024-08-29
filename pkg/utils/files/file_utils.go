@@ -9,24 +9,19 @@ import (
 )
 
 func WriteFile(path string, data bytes.Buffer) {
-	errDir := os.MkdirAll("data", os.ModePerm)
+	errDir := os.MkdirAll(filepath.Dir(path), os.ModePerm)
 	error.Check(errDir)
-	err := os.WriteFile(fullPath(path), data.Bytes(), 0644)
+	err := os.WriteFile(path, data.Bytes(), 0644)
 	error.Check(err)
 }
 
 func ReadFile(path string) *bytes.Buffer {
-	finalPath := fullPath(path)
-	if !fileExists(finalPath) {
+	if !fileExists(path) {
 		return bytes.NewBuffer([]byte{})
 	}
-	data, err := os.ReadFile(finalPath)
+	data, err := os.ReadFile(path)
 	error.Check(err)
 	return bytes.NewBuffer(data)
-}
-
-func fullPath(path string) string {
-	return filepath.Join("data", path)
 }
 
 func fileExists(path string) bool {

@@ -1,13 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Landing</title>
+    <title>Task List</title>
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
-</head>
-<body>
-    <h1>Title</h1>
-    /* here is code accessing the fields of the data passed to the template */
     <script src="/static/scripts/index.js"></script>
-    <script type="js">hello()</script>
+    <script src="/static/scripts/api.js"></script>
+    <script src="/static/scripts/service.js"></script>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+</head>
+<body onload="site_onLoad()">
+    <div class="task-list">
+        <div class="taskbar">
+            <input type="button" onclick="_service.refresh()" class="button red" value="- remove" />
+            <input type="button" class="button green" value="+ add" />
+        </div>
+        <h1>Task List</h1>
+        <span id="loading-indicator"><img src="/static/resources/loading.gif" /></span>
+        <div id="container">
+            <table>
+                <tr>
+                    <th>Number</th>
+                    <th>Task</th>
+                    <th></th>
+                </tr>
+                {{range $index, $value := .}}
+                    <tr>
+                        <td>{{ $index }} <input type="checkbox" value="{{ $index }}" /></td>
+                        <td>{{ $value }}</td>
+                        <td>
+                            <div class="row-tools">
+                                <input type="button" class="button yellow" value="edit" />
+                                <input type="button" class="button red" value="- remove" />
+                            </div>
+                        </td>
+                    </tr>
+                {{ end }}
+            </table>
+        </div>
+    </div>
 </body>
 </html>

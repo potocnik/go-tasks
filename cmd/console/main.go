@@ -9,9 +9,9 @@ import (
 )
 
 func main() {
-	logger.SetUp()
-	logger.Debug("Reading tasks from data/tasks.json", nil)
-	input := file.ReadFile("tasks.json")
+	logger.SetUpLogging()
+	logger.Debug("Reading tasks from ../data/tasks.json", nil)
+	input := file.ReadFile("../data/tasks.json")
 	var task_list = tasks.LoadState(input)
 	task_list = processCommand(task_list)
 	logger.Debug("Printing tasks to screen", nil)
@@ -20,20 +20,22 @@ func main() {
 		fmt.Println(lines[lineIndex])
 	}
 	stream := tasks.SaveState(task_list)
-	logger.Debug("Writing tasks to data/tasks.json", nil)
-	file.WriteFile("tasks.json", stream)
+	logger.Debug("Writing tasks to ../data/tasks.json", nil)
+	file.WriteFile("../data/tasks.json", stream)
 }
 
 func processCommand(task_list []string) []string {
 	logger.Info("Processing commands")
 	if len(os.Args) > 1 {
+		logger.Debug("Arguments", os.Args)
 		var command = os.Args[1]
 		switch command {
 		case "push":
 			var commandArg = ""
-			if len(os.Args) > 3 {
+			if len(os.Args) > 2 {
 				commandArg = os.Args[2]
 			}
+			logger.Debug("commandArg", commandArg)
 			return tasks.Push(task_list, commandArg)
 		case "pop":
 			tasks, _ := tasks.Pop(task_list)

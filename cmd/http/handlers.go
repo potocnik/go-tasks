@@ -9,10 +9,11 @@ import (
 	tasks "tasks/pkg/task_list"
 	error "tasks/pkg/utils/errors"
 	request "tasks/pkg/utils/request"
+	"time"
 )
 
 func handle_Taks_Get(w http.ResponseWriter) {
-	// writeToResponse(w)
+	time.Sleep(time.Duration(time.Second * 5))
 }
 
 func handle_Tasks_Post(r *http.Request, channel chan models.QueueMessage) {
@@ -49,5 +50,7 @@ func writeToResponse(w http.ResponseWriter) {
 	if len(TaskList) > 0 {
 		result = TaskList
 	}
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(result)
 }

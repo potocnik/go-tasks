@@ -23,7 +23,7 @@ var channelWork chan models.QueueMessage
 func main() {
 	setUpLogging()
 	setUpChannels()
-	input := file.ReadFile("tasks.json")
+	input := file.ReadFile("../data/tasks.json")
 	if input.Len() > 0 {
 		TaskList = tasks.LoadState(input)
 	}
@@ -62,7 +62,6 @@ func handleTasks(w http.ResponseWriter, r *http.Request) {
 		group.Add(1)
 		go handle_Tasks_Put(r, channelWork)
 		go handleQueueMessage(channelWork, &group)
-		time.Sleep(time.Second * 3)
 	case http.MethodDelete:
 		logger.Info("Starting DELETE /tasks")
 		group.Add(1)

@@ -1,3 +1,66 @@
 body {
-    color: red;
+    color: blue;
+}
+
+.taskbar {
+    float: right;
+}
+
+.task-list {
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.task-list table {
+    width: 100%;
+}
+
+.task-list table, .task-list table th, .task-list table td {
+    text-align: left;
+    border: solid 1px black;
+    border-collapse: collapse;
+}
+
+.task-list th {
+    padding: 8px;
+    font-weight: bold;
+}
+
+.task-list td {
+    padding: 8px;
+    color: black;
+}
+
+.task-list .row-tools {
+    float: right;
+}
+
+.button {
+    border: solid 1px black;
+    border-collapse: collapse;
+    padding: 4px;
+}
+
+.red {
+    background-color: red;
+    color: white;
+}
+
+.green {
+    background-color: green;
+    color: white;
+}
+
+.yellow {
+    background-color: yellow;
+    color: black;
+}
+
+#loading-indicator {
+    display: none;
+}
+
+#loading-indicator.active {
+    display: block;
 }

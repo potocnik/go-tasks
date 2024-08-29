@@ -27,7 +27,7 @@ func Push(task_list []string, task_text string) []string {
 	if task_text == "" {
 		logger.Error("cannot append empty task", nil)
 	} else if len(task_list) >= ITEM_LIMIT {
-		logger.Error("list is full (limit "+fmt.Sprintf("%d", ITEM_LIMIT)+")", nil)
+		logger.Error("list is (limit "+fmt.Sprintf("%d", ITEM_LIMIT)+")", nil)
 	} else {
 		logger.Debug("Appending task", task_text)
 		task_list = append(task_list, task_text)
@@ -56,7 +56,6 @@ func LoadState(stream *bytes.Buffer) []string {
 }
 
 func SaveState(task_list []string) bytes.Buffer {
-	logger.Info("[INFO] Writing tasks to data/tasks.json")
 	stream := writeTasks(task_list)
 	return stream
 }

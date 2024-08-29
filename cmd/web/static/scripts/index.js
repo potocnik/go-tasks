@@ -1,3 +1,3 @@
-function hello() {
-    alert('Hello!');
+function site_onLoad() {
+    console.log('onLoad entered')
 }
