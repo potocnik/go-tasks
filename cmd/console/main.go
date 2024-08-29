@@ -10,23 +10,22 @@ import (
 
 func main() {
 	logger.SetUp()
-	logger.Info("Reading tasks from data/tasks.json")
-	fmt.Println("[DEBUG] Reading tasks from data/tasks.json")
+	logger.Debug("Reading tasks from data/tasks.json", nil)
 	input := file.ReadFile("tasks.json")
 	var task_list = tasks.LoadState(input)
 	task_list = processCommand(task_list)
-	fmt.Println("[DEBUG] Printing tasks to screen")
+	logger.Debug("Printing tasks to screen", nil)
 	lines := tasks.Print(task_list)
 	for lineIndex := 0; lineIndex < len(lines); lineIndex++ {
 		fmt.Println(lines[lineIndex])
 	}
 	stream := tasks.SaveState(task_list)
-	fmt.Println("[DEBUG] Writing tasks to data/tasks.json")
+	logger.Debug("Writing tasks to data/tasks.json", nil)
 	file.WriteFile("tasks.json", stream)
 }
 
 func processCommand(task_list []string) []string {
-	fmt.Println("[INFO] Processing commands")
+	logger.Info("Processing commands")
 	if len(os.Args) > 1 {
 		var command = os.Args[1]
 		switch command {

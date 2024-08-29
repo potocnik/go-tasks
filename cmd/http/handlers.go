@@ -2,9 +2,9 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
+	logger "tasks/pkg/logging"
 	models "tasks/pkg/models"
 	tasks "tasks/pkg/task_list"
 	error "tasks/pkg/utils/errors"
@@ -44,7 +44,7 @@ func handle_Tasks_BadMethod(w http.ResponseWriter, r *http.Request) {
 }
 
 func writeToResponse(w http.ResponseWriter) {
-	fmt.Println("Writing to response")
+	logger.Info("Writing to response")
 	var result = []string{}
 	if len(TaskList) > 0 {
 		result = TaskList

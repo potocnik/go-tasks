@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	logger "tasks/pkg/logging"
 	array "tasks/pkg/utils/arrays"
 	error "tasks/pkg/utils/errors"
 )
@@ -24,11 +25,11 @@ func Print(task_list []string) []string {
 
 func Push(task_list []string, task_text string) []string {
 	if task_text == "" {
-		fmt.Println("[ERROR]: cannot append empty task")
+		logger.Error("cannot append empty task", nil)
 	} else if len(task_list) >= ITEM_LIMIT {
-		fmt.Println("[ERROR]: list is full (limit " + fmt.Sprintf("%d", ITEM_LIMIT) + ")")
+		logger.Error("list is full (limit "+fmt.Sprintf("%d", ITEM_LIMIT)+")", nil)
 	} else {
-		fmt.Println("[DEBUG]: Appending task: \"" + task_text + "\"")
+		logger.Debug("Appending task", task_text)
 		task_list = append(task_list, task_text)
 	}
 	return task_list
@@ -55,7 +56,7 @@ func LoadState(stream *bytes.Buffer) []string {
 }
 
 func SaveState(task_list []string) bytes.Buffer {
-	fmt.Println("[INFO] Writing tasks to data/tasks.json")
+	logger.Info("[INFO] Writing tasks to data/tasks.json")
 	stream := writeTasks(task_list)
 	return stream
 }

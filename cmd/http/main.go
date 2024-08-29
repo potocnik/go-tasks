@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	logger "tasks/pkg/logging"
 	models "tasks/pkg/models"
 	tasks "tasks/pkg/task_list"
 	error "tasks/pkg/utils/errors"
@@ -43,7 +44,7 @@ func setUpChannels() {
 
 func handleRequests() {
 	http.HandleFunc("/v1/api/tasks", handleTasks)
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", PORT), nil))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf("localhost:%d", PORT), nil))
 }
 
 func handleTasks(w http.ResponseWriter, r *http.Request) {
@@ -52,18 +53,18 @@ func handleTasks(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		handle_Taks_Get(w)
 	case http.MethodPost:
-		fmt.Println("Starting POST /tasks")
+		logger.Info("Starting POST /tasks")
 		group.Add(1)
 		go handle_Tasks_Post(r, channelWork)
 		go handleQueueMessage(channelWork, &group)
 	case http.MethodPut:
-		fmt.Println("Starting PUT /tasks")
+		logger.Info("Starting PUT /tasks")
 		group.Add(1)
 		go handle_Tasks_Put(r, channelWork)
 		go handleQueueMessage(channelWork, &group)
 		time.Sleep(time.Second * 3)
 	case http.MethodDelete:
-		fmt.Println("Starting DELETE /tasks")
+		logger.Info("Starting DELETE /tasks")
 		group.Add(1)
 		go handle_Tasks_Delete(channelWork)
 		go handleQueueMessage(channelWork, &group)
@@ -77,7 +78,7 @@ func handleTasks(w http.ResponseWriter, r *http.Request) {
 func handleQueueMessage(channel chan models.QueueMessage, group *sync.WaitGroup) {
 	select {
 	case queueMessage := <-channel:
-		fmt.Printf("Consumer Received: %v\n", queueMessage)
+		logger.Debug("Consumer Received:", queueMessage)
 		group.Done()
 	case <-time.After(time.Second * 2):
 		// #TODO: Return timeout status code
